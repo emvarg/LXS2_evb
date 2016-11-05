@@ -1,0 +1,20 @@
+    1   
+    2  echo " " > .bash_history
+    3  cd LXS2_evb/
+    4  ls
+    5  history
+    6  history > file
+    7  ls
+    8  cat file 
+    9  rm file 
+   10  ls
+   11  echo $HOSTNAME
+   12  pwd
+   13  ls
+   14  history > history/history-$HOSTNAME
+   15  tree
+   16  date
+   17  date +%Y%m%d
+   18  history > history/history-$HOSTNAME`date +%Y%m%d`
+   19  tree
+   20  history > history/history-$HOSTNAME-`date +%Y%m%d`
