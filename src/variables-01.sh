@@ -18,6 +18,12 @@ OUTDIR=$WRKDIR/../misc
 #echo $WRKDIR
 #echo $OUTDIR
 
-cp -v casa perro $OUTDIR/ > $OUTDIR/out.log 2> $OUTDIR/error.log
+cp -v casa perro $OUTDIR/ >> $OUTDIR/out.log 2>> $OUTDIR/error.log
 
+## Ejemplo de expresiones regulares
+
+OBJETIVO=dhcpd.conf
+SALIDA=clientes_ocupados.log
+
+grep  -v "#" $OUTDIR/$OBJETIVO | sed '/^\s*$/d' | grep fixed | cut -d " " -f2 | sed 's/;//' | cut -d "." -f4 > $SALIDA
 
