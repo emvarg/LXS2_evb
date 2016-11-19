@@ -1,0 +1,15 @@
+= Git cheat sheet / Command reference guide
+Explicar que hace cada comando
+
+git add
+git commit
+git push
+git show --stat <hash del commit>
+git log
+git diff
+git status
+git init
+git clone
+git remote
+git remote -v
+
