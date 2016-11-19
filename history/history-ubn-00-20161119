@@ -1,0 +1,345 @@
+    1  sudo visudo
+    2  ls
+    3  cd LXS2_
+    4  cd LXS2_evb/
+    5  ls
+    6  git log 
+    7  git status 
+    8  history | less 
+    9  cd 
+   10  ls -a 
+   11  history 
+   12  #mv .bash_history .bash_history
+   13  mkdir old_history
+   14  mv .bash_history old_history/
+   15  touch .bash_history
+   16  ls -l .bash_history
+   17  ip -4 addr 
+   18  ls /var/www/html/
+   19  cat /var/www/html/1.html 
+   20  ip -4 addr 
+   21  ssh user1@10.124.18.28
+   22  ps aux
+   23  history 
+   24  ### Inicio de seccion de entrecomillado
+   25  history 
+   26  ####
+   27  history 
+   28  ######
+   29  #####
+   30  history 
+   31  #######
+   32  ########
+   33  #########
+   34  history 
+   35  VAR1=trump
+   36  echo $VAR1 es una rata
+   37  ### Tipos de entrecomillado
+   38  ## "", ``,
+   39  ## "", ``, ''
+   40  ## "" : Defino un string 
+   41  ## `` : ejecuto un comando para procesar la salida
+   42  ## '' : Utilizo el significado literal de los caracteres
+   43  echo '$VAR1 es una rata'
+   44  ls
+   45  cd LXS2_evb/
+   46  ls
+   47  cd misc/
+   48  ls
+   49  git status 
+   50  ls
+   51  mkdir tmp1
+   52  ls
+   53  mv `ls *.log` tmp1/
+   54  ls
+   55  tree
+   56  ls *.log
+   57  ls tmp1/*.log
+   58  mv tmp1/* .
+   59  ls *.log
+   60  mv auth.log  error.log  out.log tmp1/
+   61  echo hola mundo
+   62  echo hola
+   63  mundo
+   64  echo "hola
+   65  mundo"
+   66  echo "
+   67  hola
+   68  mundo"
+   69  echo "
+   70  hola
+   71  mundo
+   72  "
+   73  history 
+   74  ls
+   75  cat dhcpd.conf 
+   76  history 
+   77  grep host dhcpd.conf 
+   78  grep host *
+   79  ls
+   80  grep host -R *
+   81  grep host *
+   82  ls
+   83  grep host * 2> /tmp/error.log
+   84  cat /tmp/error.log
+   85  grep host -R * 2> /tmp/error.log
+   86  cat /tmp/error.log
+   87  find . 
+   88  grep host `find .`
+   89  #grep host -R * 2> /tmp/error.log
+   90  #grep host `find .`
+   91  #grep host `find .` 2> /tmp/error.log
+   92  find . | grep host 
+   93  find . | grep host
+   94  find .
+   95  find . | grep host -
+   96  find . | grep log
+   97  echo el valor del \$ esta en ¢500 
+   98  ls
+   99  mv tmp1/* .
+  100  ls
+  101  tree
+  102  rm -r tmp1/
+  103  git status 
+  104  git pull github master 
+  105  ls
+  106  echo 4\*\2\>10\ es\ falso
+  107  echo "4*2>10 es falso"
+  108  echo "el precio total es \$5"
+  109  echo "el precio total es $5"
+  110  echo $5
+  111  echo 'El precio total es de $5'
+  112  ls
+  113  echo 4*2>10 es falso
+  114  ls
+  115  cat 10
+  116  echo 4*2 >10 es falso
+  117  cat 10 
+  118  echo 4*2 es falso > 10
+  119  cat 10 
+  120  env | STD
+  121  env | grep STD
+  122  set  | grep STD
+  123  env | less 
+  124  ls
+  125  cp algo /tmp
+  126  echo $?
+  127  ls
+  128  echo $?
+  129  ls && mkdir tmp2
+  130  ls
+  131  cp algo /tmp
+  132  cp algo /tmp && mkdir tmp3
+  133  ls
+  134  cp algo /tmp && mkdir tmp3
+  135  cp algo /tmp 2> /tmp/error && mkdir tmp3
+  136  ls
+  137  cat /tmp/error
+  138  history 
+  139  ls
+  140  touch '-C'
+  141  touch '\-C'
+  142  ls
+  143  rm '\-C'
+  144  ls
+  145  t \-C
+  146  rm \'-C'
+  147  touch  \'-C'
+  148  asjkdfnkas d'
+  149  ls
+  150  rm ''-C?asjkdfnkas d'
+  151  rm '\-C?asjkdfnkas d'
+  152  history 
+  153  rm \'-C'asjkdfnkas d'
+  154  ls
+  155  rm \'-C'
+  156  asjkdfnkas d'
+  157  ls
+  158  pstree | less
+  159  sudo apt-get install apache2
+  160  pstree | less
+  161  ssh 10.124.18.41
+  162  pstree | less
+  163  pstree | less 
+  164  netstat -na | less 
+  165  watch -n 1 "dmesg | tail"
+  166  ps aux
+  167  kill -9 7227
+  168  w
+  169  w
+  170  cat .bashrc 
+  171  exit
+  172  exit
+  173  exit
+  174  watch -n 1 w
+  175  cat /proc/meminfo 
+  176  free
+  177  free -lh
+  178  free -h
+  179  htop
+  180  sudo apt-get install htop
+  181  htop
+  182  top
+  183  apt-cache search iotop
+  184  sudo apt-get install iotop
+  185  iotop
+  186  sudo iotop
+  187  apt-cache search iftop
+  188  sudo apt-get install iftop
+  189  iftop 
+  190  sudo iftop 
+  191  history 
+  192  sudo su -
+  193  cd LXS2_evb/
+  194  ls
+  195  cd misc/
+  196  ls
+  197  vim test1.txt
+  198  jobs
+  199  cd /etc/apache2/sites-available/
+  200  ls
+  201  cat 000-default.conf 
+  202  cat 000-default.conf | grep -v "#"
+  203  jobs
+  204  fg
+  205  jobs
+  206  ls
+  207  cd 
+  208  ls
+  209  jobs
+  210  fg
+  211  ls
+  212  fg
+  213  cd -
+  214  cd LXS2_evb/
+  215  ls
+  216  cd 
+  217  pwd
+  218  pushd ~/LXS2_evb/misc
+  219  dirs
+  220  pushd /etc/apache2/sites-available/
+  221  dirs -v
+  222  cd /var/www/
+  223  dirs
+  224  dirs -v
+  225  popd 1
+  226  popd -n 1
+  227  popd -N 1
+  228  popd +1
+  229  dirs -v
+  230  cd 
+  231  dirs
+  232  popd
+  233  dirs
+  234  pushd LXS2_evb/misc/
+  235  pushd /etc/apache2/sites-available/
+  236  dirs -v
+  237  cd /var/www/
+  238  dirs -v 
+  239  popd
+  240  cd /usr/share/doc/vim-nox
+  241  cd ~/LXS2_evb/misc/
+  242  ls
+  243  dirs
+  244  pushd /etc/apache2/
+  245  pushd /var/www/
+  246  dirs -v 
+  247  popd 2
+  248  cd 
+  249  ls
+  250  yes
+  251  jobs
+  252  yes hola
+  253  yes hola > /dev/null
+  254  jobs
+  255  yes hola > /dev/null &
+  256  jobs
+  257  ping 127.0.0.1
+  258  ping 127.0.0.1 &
+  259  ls
+  260  cd Document
+  261  ls
+  262  cd Music/
+  263  ls
+  264  ls -la
+  265  jobs
+  266  ping 127.0.0.1 > /dev/null &
+  267  jobs
+  268  history 
+  269  jobs
+  270  ls
+  271  cd 
+  272  cd LXS2_
+  273  cd LXS2_evb/
+  274  ls
+  275  cd misc/
+  276  ls
+  277  vim test1.txt 
+  278  jobs
+  279  fg 2
+  280  jobs
+  281  bg 2
+  282  jobs
+  283  ps
+  284  bc
+  285  ps -l
+  286  jobs
+  287  ps -a 
+  288  id
+  289  ps aux
+  290  w
+  291  sudo service ssh 
+  292  w
+  293  ps aux | grep sshd
+  294  kill -9 6504
+  295  sudo kill -9 6504
+  296  sudo kill -9 6974
+  297  w
+  298  sudo kill -15 6974
+  299  history 
+  300  ps -l
+  301  w
+  302  ps -x
+  303  su - user1
+  304  ssh user1@10.124.18.28
+  305  sudo service sshd start 
+  306  sudo service ssh start 
+  307  ssh user1@10.124.18.28
+  308  jobs
+  309  ps -a
+  310  ps -a | grep ping 
+  311  ps -a | grep ping  | cut -d " " -f1
+  312  ps -a | grep ping  | cut -d " " -f2
+  313  PID_MASTER=`ps -a | grep ping  | cut -d " " -f2`
+  314  echo $PID_MASTER
+  315  pgrep ping 
+  316  PID_MASTER=`pgrep ping`
+  317  echo $PID_MASTER
+  318  ps -a
+  319  kill -15 `pgrep yes`
+  320  jobs
+  321  ps -l
+  322  sudo renice -n -5 -p `pgrep ping`
+  323  ps -l
+  324  sudo renice -n 6 -p `pgrep ping`
+  325  ps -l
+  326  ls /proc/
+  327  ls /proc/irq/
+  328  cat /proc/cpuinfo 
+  329  free
+  330  free -h
+  331  df -lh
+  332  uptime 
+  333  ssh uk@lolo.emate.ucr.ac.cr
+  334  ssh uk@163.178.110.7
+  335  ssh uk@pris.eie.ucr.ac.cr
+  336  vim ~/.bashrc 
+  337  ssh sysadmin@10.124.18.28
+  338  vim ~/.bashrc 
+  339  ssh sysadmin@10.124.18.28
+  340  vim ~/.bashrc 
+  341  ssh sysadmin@10.124.18.28
+  342  vim ~/.bashrc 
+  343  ls
+  344  pwd
+  345  history > LXS2_evb/history/history-$HOSTNAME-`date +%Y%m%d`
