@@ -155,12 +155,48 @@ Finalmente se monta el dispositivo
 # mount /dev/mapper/vg01-misConfigs /mnt/configs
 # mount   --->> NOTA: observe la última línea de la salida
 # df -lh
+# umount /mnt/configs
 
 Ahora se extenderá el tamaño de esta partición, para esto extendemos el 
 grupo vg01 con la partición /dev/vdb1
 
 # vgextend vg01 /dev/vdb1
-# vgdisplay
+# vgdisplay  --->> ¿A cuanto aumentó el tamaño del grupo?
+
+Luego se extiene el volumen lógico, por ejemplo unos 200M más
+
+# lvextend -L+200M /dev/vg01/misConfigs
+# lvdisplay
+# df -lh
+
+¿Aumentó de tamaño? Al ver la salida de lvdisplay se puede notar que
+efectivamente aumentó de tamaño. Monte el dispositivo
+
+# mount /dev/mapper/vg01-misConfigs /mnt/configs
+# df -lh
+
+Como se puede observar, el tamaño sigue igual, para esto tenemos que decirle 
+a la tabla del sistema de archivos que ahora tenemos más espacio.
+
+# umount /mnt/configs
+# e2fsck -f /dev/vg01/misConfigs
+# resize2fs /dev/vg01/misConfigs
+
+El comando e2fsck revisa el sistema en busca de algún error para repararlo, y
+con el comando resize2fs se actualiza la tabla de archivos.
+
+
+# mount /dev/mapper/vg01-misConfigs /mnt/configs
+# df -lh
+
+Se puede notar como el volumen lógico posee más espacio.
+
+
+= Referencias =
+[1] https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Virtualization_Administration_Guide/sect-Virtualization-Virtualized_block_devices-Adding_storage_devices_to_guests.html
+[2] https://www.howtoforge.com/linux_lvm_snapshots
+[3] http://www.slashroot.in/advanced-guide-lvm-logical-volume-management-linux-part-1
+
 
 
 
