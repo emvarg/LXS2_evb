@@ -28,7 +28,7 @@ Crear dos unidades dentro de pool "media-pool"
 $ sudo su -
 # cd /media/<user>/media-pool
 # dd if=/dev/zero of=./disk-00.img bs=1M count=256
-# dd if=/dev/zero of=./disk-01.img bs=1M count=256
+# dd if=/dev/zero of=./disk-01.img bs=1M count=0
 # exit
 
 #########################################################################
@@ -48,10 +48,13 @@ se puede agregar el dispositivo. Hay tres opciones obligartorias:
 No se agrega vda debido a que se supone que ya existe un sistema instalado
 y por consiguiente el primer dispositivo físico ya es†á utilizado.
 
+## En ubuntu 16.04 se debe configurar apparmor para crear un pool nuevo.
+## Para seguir con el lab, vamos a copiar las imagenes disk-xx.img al
+## path por defecto para las imagenes que sería /var/lib/libvirtd/images
 
 $ virsh
-virsh # attach-disk <VM> /media/<user>/media-pool/disk-00.img vdb --cache none --live
-virsh # attach-disk <VM> /media/<user>/media-pool/disk-01.img vdc --cache none --live
+virsh # attach-disk <VM> /var/lib/libvirtd/images/disk-00.img vdb --cache none --live
+virsh # attach-disk <VM> /var/lib/libvirtd/images/disk-01.img vdc --cache none --live
 
 Notar que los dispositivos ahora son vdb y vdc. Utilice ssh para iniciar una 
 sesión remota en su máquina virtual. Ahora ejecute el siguiente comando:
