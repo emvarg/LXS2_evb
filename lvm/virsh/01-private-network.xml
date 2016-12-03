@@ -1,0 +1,5 @@
+<network>
+  <name>private-network</name>
+  <ip address="10.0.0.1" netmask="255.255.255.0">
+  </ip>
+</network>
