@@ -1,0 +1,213 @@
+__Simbología__
+
+<VM> : nombre de la máquina virtual
+<user> : nombre de su usuario administrador
+
+= Pasos para crear el pool "media-pool" =
+
+$ virsh
+virsh # pool-define-as media-pool dir --target /media/<user>/media-pool
+virsh # pool-list
+virsh # pool-list --all
+virsh # pool-build media-pool
+virsh # pool-list --all
+virsh # pool-start media-pool
+virsh # pool-list --all
+virsh # pool-autostart media-pool
+virsh # exit
+
+Verificar que el pool ha sido marcado para el autostart en 
+[/etc/libvirt/storage/autostart]. Usar el comando "ls -l" para observar
+el enlace simbólico.
+
+
+= Pasos agregar el disco nuevo a la VM (Virtual Machine) =
+
+Crear dos unidades dentro de pool "media-pool"
+
+$ sudo su -
+# cd /media/<user>/media-pool
+# dd if=/dev/zero of=./disk-00.img bs=1M count=256
+# dd if=/dev/zero of=./disk-01.img bs=1M count=0
+# exit
+
+#########################################################################
+# Nota: si quisiera crear una imagen que aumente de tamaño a como se    #
+# va ocupando, se debe agregar la opción bs=1M seek=256 count=0 de esta #
+# forma se define el espacio, pero no se llena de ceros.		#
+#########################################################################
+
+
+Ahora se agregan estas dos unidades a la <VM>. Con el comando attach-disk
+se puede agregar el dispositivo. Hay tres opciones obligartorias:
+
+ * dominio
+ * ubicación del .img
+ * letra del dispositivo (vdb, vdc)
+
+No se agrega vda debido a que se supone que ya existe un sistema instalado
+y por consiguiente el primer dispositivo físico ya es†á utilizado.
+
+## En ubuntu 16.04 se debe configurar apparmor para crear un pool nuevo.
+## Para seguir con el lab, vamos a copiar las imagenes disk-xx.img al
+## path por defecto para las imagenes que sería /var/lib/libvirtd/images
+
+$ virsh
+virsh # attach-disk <VM> /var/lib/libvirtd/images/disk-00.img vdb --cache none --live
+virsh # attach-disk <VM> /var/lib/libvirtd/images/disk-01.img vdc --cache none --live
+
+Notar que los dispositivos ahora son vdb y vdc. Utilice ssh para iniciar una 
+sesión remota en su máquina virtual. Ahora ejecute el siguiente comando:
+
+$ sudo fdisk -l
+
+Deberían aparecer los dos nuevos discos. Si no posee discos virtuales (vda)
+sino que posee discos scsi (sda, sdb, etc) las nuevas unidades tengran
+los nombres asignados vda y vdb.
+
+Si desea desmontar el disco puede utilizar el comando "detach-disk". Realice
+la siguiente prueba: desmonte un dispositivo, verifique en la <VM> que
+efectivamente se eliminó y luego vuelva a agregarlo.
+
+$ virsh
+virsh # detach-disk <VM> <letra del dispositivo> --live
+virsh # exit
+$ ssh <VM>
+
+..<VM>$ sudo fdisk -l
+..<VM>$ exit
+
+$ virsh
+virsh # attach-disk <VM> /media/<user>/media-pool/disk-01.img vdc --cache none --live
+virsh # exit
+
+Vuelva a conectarse a la <VM> y verifique que el dispositivo se agregó correctamente.
+
+Todos estos cambios se pierden al momento de reiniciar. Para que sean
+persistentes se pasa la opción --config. Esto escribe una entrada
+en el archivo que define a la <VM>.
+
+= Formato de las particiones para ser usadas como LVM =
+
+Se usa fdisk y el tipo de formato es "8e" que se refiere a Linux LVM. Inicie
+una sesión remota con ssh en su <VM>. En este punto ya debería tener dos
+particiones extra, sin formato.
+
+Use fdisk para dar formato. Suponga que los dos dispositivos se llaman
+
+	/dev/vda
+	/dev/vdb
+
+$ ssh <VM>
+
+..<VM>$ sudo fdisk -l
+..<VM>$ sudo fdisk /dev/vda
+
+Escriba las siguientes opciones (sin la descripción después de los dos puntos):
+
+o: crea una tabla DOS en blanco
+p: imprime tabla de particiones
+n: nueva partición
+p: primaria
+1: numero de partición, en este caso será /dev/vda1
+<enter>: primer sector por defecto
+<enter>: último sector por defecto
+p: imprime tabla de particiones
+l: lista las particiones conocidas, nosotros usaremos la 8e (identifique este
+   tipo de partición)
+t: cambia el tipo de partición
+8e: partición tipo LVM Linux
+p: imprime tabla de particiones. Notar la columna "Type" más a la derecha.
+w: escribe los cambios
+
+Repita este procedimiento para el dispositivo "/dev/vdb"
+
+Luego de las dos particiones están listas tenemos que instalar los programas
+para trabajar con las particiones LVM.
+
+$ sudo apt-get install lvm2
+
+Ahora, como root vamos a crear nuestro sistema
+
+$ sudo su -
+# pvcreate /dev/vda1
+# pvcreate /dev/vdb1
+# pvdisplay
+
+Ya marcamos las dos particiones como volumenes físicos, ahora vamos a crear
+un grupo de volumenes llamado vg01
+
+# vgcreate vg01 /dev/vda1
+# vgdisplay
+
+Ahora se crea un volumen lógico dentro de ese grupo
+
+# lvcreate -L 200M -n misConfigs vg01
+# lvdisplay
+# vgdisplay
+
+Note que ahora el vg01 tiene menos espacio disponible, ¿cuanto? 
+
+Lo que sigue es crear el sistema de archivos en el dispositivo recién creado
+
+# mkfs -t ext4 /dev/mapper/vg01-misConfigs
+
+Finalmente se monta el dispositivo
+
+# mkdir /mnt/configs
+# mount /dev/mapper/vg01-misConfigs /mnt/configs
+# mount   --->> NOTA: observe la última línea de la salida
+# df -lh
+# umount /mnt/configs
+
+Ahora se extenderá el tamaño de esta partición, para esto extendemos el 
+grupo vg01 con la partición /dev/vdb1
+
+# vgextend vg01 /dev/vdb1
+# vgdisplay  --->> ¿A cuanto aumentó el tamaño del grupo?
+
+Luego se extiene el volumen lógico, por ejemplo unos 200M más
+
+# lvextend -L+200M /dev/vg01/misConfigs
+# lvdisplay
+# df -lh
+
+¿Aumentó de tamaño? Al ver la salida de lvdisplay se puede notar que
+efectivamente aumentó de tamaño. Monte el dispositivo
+
+# mount /dev/mapper/vg01-misConfigs /mnt/configs
+# df -lh
+
+Como se puede observar, el tamaño sigue igual, para esto tenemos que decirle 
+a la tabla del sistema de archivos que ahora tenemos más espacio.
+
+# umount /mnt/configs
+# e2fsck -f /dev/vg01/misConfigs
+# resize2fs /dev/vg01/misConfigs
+
+El comando e2fsck revisa el sistema en busca de algún error para repararlo, y
+con el comando resize2fs se actualiza la tabla de archivos.
+
+
+# mount /dev/mapper/vg01-misConfigs /mnt/configs
+# df -lh
+
+Se puede notar como el volumen lógico posee más espacio.
+
+
+= Referencias =
+[1] https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Virtualization_Administration_Guide/sect-Virtualization-Virtualized_block_devices-Adding_storage_devices_to_guests.html
+[2] https://www.howtoforge.com/linux_lvm_snapshots
+[3] http://www.slashroot.in/advanced-guide-lvm-logical-volume-management-linux-part-1
+
+
+
+
+
+
+
+
+
+
+
+
