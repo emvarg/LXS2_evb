@@ -7,6 +7,10 @@
 
 PARAMETROS=3
 VERSION_BASH="4.3.11"
+ERR_DISTRO=2
+ERR_BASH=3
+ERR_PARAM=4
+CONTADOR=1
 
 # Evaluar si la distro es ubuntu y si la versión de bash
 # es 4.3.11
@@ -46,6 +50,32 @@ fi
 
 echo "Los parámetros fueron"
 echo $@
+
+#Impresión de los parámetros
+for i in "$*"
+do
+	echo "Uno de los parámetros es: $i"
+done
+
+
+# Impresión de elementos
+for i in alto otro caso
+do
+	echo "Elemento # $CONTADOR del segundo for es $i"
+	let "CONTADOR=$CONTADOR+1"
+done
+
+echo "
+	El valor del contador es $CONTADOR
+	"
+
+# Rangos de números
+for m in {1..10}
+do
+	echo "El contador es $CONTADOR y el número es $m"
+	((CONTADOR++))
+done
+
 
 
 
