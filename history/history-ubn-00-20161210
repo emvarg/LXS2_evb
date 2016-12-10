@@ -1,0 +1,606 @@
+    1  sudo visudo
+    2  ls
+    3  cd LXS2_
+    4  cd LXS2_evb/
+    5  ls
+    6  git log 
+    7  git status 
+    8  history | less 
+    9  cd 
+   10  ls -a 
+   11  history 
+   12  #mv .bash_history .bash_history
+   13  mkdir old_history
+   14  mv .bash_history old_history/
+   15  touch .bash_history
+   16  ls -l .bash_history
+   17  ip -4 addr 
+   18  ls /var/www/html/
+   19  cat /var/www/html/1.html 
+   20  ip -4 addr 
+   21  ssh user1@10.124.18.28
+   22  ps aux
+   23  history 
+   24  ### Inicio de seccion de entrecomillado
+   25  history 
+   26  ####
+   27  history 
+   28  ######
+   29  #####
+   30  history 
+   31  #######
+   32  ########
+   33  #########
+   34  history 
+   35  VAR1=trump
+   36  echo $VAR1 es una rata
+   37  ### Tipos de entrecomillado
+   38  ## "", ``,
+   39  ## "", ``, ''
+   40  ## "" : Defino un string 
+   41  ## `` : ejecuto un comando para procesar la salida
+   42  ## '' : Utilizo el significado literal de los caracteres
+   43  echo '$VAR1 es una rata'
+   44  ls
+   45  cd LXS2_evb/
+   46  ls
+   47  cd misc/
+   48  ls
+   49  git status 
+   50  ls
+   51  mkdir tmp1
+   52  ls
+   53  mv `ls *.log` tmp1/
+   54  ls
+   55  tree
+   56  ls *.log
+   57  ls tmp1/*.log
+   58  mv tmp1/* .
+   59  ls *.log
+   60  mv auth.log  error.log  out.log tmp1/
+   61  echo hola mundo
+   62  echo hola
+   63  mundo
+   64  echo "hola
+   65  mundo"
+   66  echo "
+   67  hola
+   68  mundo"
+   69  echo "
+   70  hola
+   71  mundo
+   72  "
+   73  history 
+   74  ls
+   75  cat dhcpd.conf 
+   76  history 
+   77  grep host dhcpd.conf 
+   78  grep host *
+   79  ls
+   80  grep host -R *
+   81  grep host *
+   82  ls
+   83  grep host * 2> /tmp/error.log
+   84  cat /tmp/error.log
+   85  grep host -R * 2> /tmp/error.log
+   86  cat /tmp/error.log
+   87  find . 
+   88  grep host `find .`
+   89  #grep host -R * 2> /tmp/error.log
+   90  #grep host `find .`
+   91  #grep host `find .` 2> /tmp/error.log
+   92  find . | grep host 
+   93  find . | grep host
+   94  find .
+   95  find . | grep host -
+   96  find . | grep log
+   97  echo el valor del \$ esta en ¢500 
+   98  ls
+   99  mv tmp1/* .
+  100  ls
+  101  tree
+  102  rm -r tmp1/
+  103  git status 
+  104  git pull github master 
+  105  ls
+  106  echo 4\*\2\>10\ es\ falso
+  107  echo "4*2>10 es falso"
+  108  echo "el precio total es \$5"
+  109  echo "el precio total es $5"
+  110  echo $5
+  111  echo 'El precio total es de $5'
+  112  ls
+  113  echo 4*2>10 es falso
+  114  ls
+  115  cat 10
+  116  echo 4*2 >10 es falso
+  117  cat 10 
+  118  echo 4*2 es falso > 10
+  119  cat 10 
+  120  env | STD
+  121  env | grep STD
+  122  set  | grep STD
+  123  env | less 
+  124  ls
+  125  cp algo /tmp
+  126  echo $?
+  127  ls
+  128  echo $?
+  129  ls && mkdir tmp2
+  130  ls
+  131  cp algo /tmp
+  132  cp algo /tmp && mkdir tmp3
+  133  ls
+  134  cp algo /tmp && mkdir tmp3
+  135  cp algo /tmp 2> /tmp/error && mkdir tmp3
+  136  ls
+  137  cat /tmp/error
+  138  history 
+  139  ls
+  140  touch '-C'
+  141  touch '\-C'
+  142  ls
+  143  rm '\-C'
+  144  ls
+  145  t \-C
+  146  rm \'-C'
+  147  touch  \'-C'
+  148  asjkdfnkas d'
+  149  ls
+  150  rm ''-C?asjkdfnkas d'
+  151  rm '\-C?asjkdfnkas d'
+  152  history 
+  153  rm \'-C'asjkdfnkas d'
+  154  ls
+  155  rm \'-C'
+  156  asjkdfnkas d'
+  157  ls
+  158  pstree | less
+  159  sudo apt-get install apache2
+  160  pstree | less
+  161  ssh 10.124.18.41
+  162  pstree | less
+  163  pstree | less 
+  164  netstat -na | less 
+  165  watch -n 1 "dmesg | tail"
+  166  ps aux
+  167  kill -9 7227
+  168  w
+  169  w
+  170  cat .bashrc 
+  171  exit
+  172  exit
+  173  exit
+  174  watch -n 1 w
+  175  cat /proc/meminfo 
+  176  free
+  177  free -lh
+  178  free -h
+  179  htop
+  180  sudo apt-get install htop
+  181  htop
+  182  top
+  183  apt-cache search iotop
+  184  sudo apt-get install iotop
+  185  iotop
+  186  sudo iotop
+  187  apt-cache search iftop
+  188  sudo apt-get install iftop
+  189  iftop 
+  190  sudo iftop 
+  191  history 
+  192  sudo su -
+  193  cd LXS2_evb/
+  194  ls
+  195  cd misc/
+  196  ls
+  197  vim test1.txt
+  198  jobs
+  199  cd /etc/apache2/sites-available/
+  200  ls
+  201  cat 000-default.conf 
+  202  cat 000-default.conf | grep -v "#"
+  203  jobs
+  204  fg
+  205  jobs
+  206  ls
+  207  cd 
+  208  ls
+  209  jobs
+  210  fg
+  211  ls
+  212  fg
+  213  cd -
+  214  cd LXS2_evb/
+  215  ls
+  216  cd 
+  217  pwd
+  218  pushd ~/LXS2_evb/misc
+  219  dirs
+  220  pushd /etc/apache2/sites-available/
+  221  dirs -v
+  222  cd /var/www/
+  223  dirs
+  224  dirs -v
+  225  popd 1
+  226  popd -n 1
+  227  popd -N 1
+  228  popd +1
+  229  dirs -v
+  230  cd 
+  231  dirs
+  232  popd
+  233  dirs
+  234  pushd LXS2_evb/misc/
+  235  pushd /etc/apache2/sites-available/
+  236  dirs -v
+  237  cd /var/www/
+  238  dirs -v 
+  239  popd
+  240  cd /usr/share/doc/vim-nox
+  241  cd ~/LXS2_evb/misc/
+  242  ls
+  243  dirs
+  244  pushd /etc/apache2/
+  245  pushd /var/www/
+  246  dirs -v 
+  247  popd 2
+  248  cd 
+  249  ls
+  250  yes
+  251  jobs
+  252  yes hola
+  253  yes hola > /dev/null
+  254  jobs
+  255  yes hola > /dev/null &
+  256  jobs
+  257  ping 127.0.0.1
+  258  ping 127.0.0.1 &
+  259  ls
+  260  cd Document
+  261  ls
+  262  cd Music/
+  263  ls
+  264  ls -la
+  265  jobs
+  266  ping 127.0.0.1 > /dev/null &
+  267  jobs
+  268  history 
+  269  jobs
+  270  ls
+  271  cd 
+  272  cd LXS2_
+  273  cd LXS2_evb/
+  274  ls
+  275  cd misc/
+  276  ls
+  277  vim test1.txt 
+  278  jobs
+  279  fg 2
+  280  jobs
+  281  bg 2
+  282  jobs
+  283  ps
+  284  bc
+  285  ps -l
+  286  jobs
+  287  ps -a 
+  288  id
+  289  ps aux
+  290  w
+  291  sudo service ssh 
+  292  w
+  293  ps aux | grep sshd
+  294  kill -9 6504
+  295  sudo kill -9 6504
+  296  sudo kill -9 6974
+  297  w
+  298  sudo kill -15 6974
+  299  history 
+  300  ps -l
+  301  w
+  302  ps -x
+  303  su - user1
+  304  ssh user1@10.124.18.28
+  305  sudo service sshd start 
+  306  sudo service ssh start 
+  307  ssh user1@10.124.18.28
+  308  jobs
+  309  ps -a
+  310  ps -a | grep ping 
+  311  ps -a | grep ping  | cut -d " " -f1
+  312  ps -a | grep ping  | cut -d " " -f2
+  313  PID_MASTER=`ps -a | grep ping  | cut -d " " -f2`
+  314  echo $PID_MASTER
+  315  pgrep ping 
+  316  PID_MASTER=`pgrep ping`
+  317  echo $PID_MASTER
+  318  ps -a
+  319  kill -15 `pgrep yes`
+  320  jobs
+  321  ps -l
+  322  sudo renice -n -5 -p `pgrep ping`
+  323  ps -l
+  324  sudo renice -n 6 -p `pgrep ping`
+  325  ps -l
+  326  ls /proc/
+  327  ls /proc/irq/
+  328  cat /proc/cpuinfo 
+  329  free
+  330  free -h
+  331  df -lh
+  332  uptime 
+  333  ssh uk@lolo.emate.ucr.ac.cr
+  334  ssh uk@163.178.110.7
+  335  ssh uk@pris.eie.ucr.ac.cr
+  336  vim ~/.bashrc 
+  337  ssh sysadmin@10.124.18.28
+  338  vim ~/.bashrc 
+  339  ssh sysadmin@10.124.18.28
+  340  vim ~/.bashrc 
+  341  ssh sysadmin@10.124.18.28
+  342  vim ~/.bashrc 
+  343  ls
+  344  pwd
+  345  history > LXS2_evb/history/history-$HOSTNAME-`date +%Y%m%d`
+  346  cd LXS2_evb/
+  347  ls
+  348  git status 
+  349  git add history/history-ubn-00-20161119 
+  350  git status 
+  351  git commit -m "history de la clase 3: Procesos y entrecomillado"
+  352  git push github master 
+  353  exit
+  354  ssh 10.124.18.138
+  355  ssh 10.124.18.38
+  356  ssh 10.124.18.52
+  357  cd /tmp/
+  358  ls
+  359  vim cosa
+  360  virsh
+  361  ssh 10.124.18.95
+  362  ssh 10.124.18.38
+  363  #ssh 10.124.18.
+  364  ip -4 addr
+  365  ssh 10.124.18.124
+  366  ip -4 addr 
+  367  ls .ssh/
+  368  #ssh-copy-id user1@10.124.18.74
+  369  ls
+  370  sudo su -
+  371  exit 
+  372  ssh 10.124.18.111
+  373  visudo
+  374  sudo visudo
+  375  ls /media/
+  376  mkdir -p user1/media-pool
+  377  cd /media/sysadmin/
+  378  ls
+  379  ls 
+  380  tree
+  381  #ssh-copy-id sysadmin@192.168.122.250
+  382  sudos su -
+  383  sudo su -
+  384  ssh uk@lolo.emate.ucr.ac.cr
+  385  virsh
+  386  sudo virsh 
+  387  sudo su -
+  388  virsh 
+  389  ssh uk@lolo.emate.ucr.ac.cr
+  390  sudo su -
+  391  sudo su -
+  392  ls .ssh/
+  393  ssh-copy-id sysadmin@192.168.122.243
+  394  ssh 192.168.122.243
+  395  ssh sysadmin@192.168.122.250
+  396  su - user1
+  397  ssh 10.124.18.52
+  398  ssh 10.124.18.41
+  399  ssh sysadmin@192.168.122.250
+  400  sudo su - user1
+  401  sudo su user1 - 
+  402  su - user1 
+  403  ssh sysadmin@192.168.122.143
+  404  ssh sysadmin@192.168.122.243
+  405  ip -4 addr 
+  406  ssh sysadmin@192.168.122.243
+  407  ssh 192.168.122.243
+  408  ls
+  409  cd LXS2_evb/
+  410  ls
+  411  git pull github master 
+  412  tree lvm/
+  413  ls
+  414  cd lvm/
+  415  ls
+  416  vim gui-lvm.wiki 
+  417  cd 
+  418  /tmp/
+  419  s
+  420  ls
+  421  cd /tmp/
+  422  #git clone http://aulavirtual.cursosti.ucr.ac.cr/mod/url/view.php?id=14
+  423  ls
+  424  git clone https://github.com/emvarg/LXS2_evb.git
+  425  cd LXS2_evb/
+  426  ls
+  427  cd lvm/
+  428  ls
+  429  tree
+  430  vim gui-lvm.wiki 
+  431  cd /tmp/
+  432  ls
+  433  mkdir miRepo
+  434  ls
+  435  cd miRepo/
+  436  ls
+  437  cp -r /tmp/LXS2_evb/lvm/ . 
+  438  ls
+  439  vim lvm/gui-lvm.wiki 
+  440  cd 
+  441  ls
+  442  cd LXS2_evb/
+  443  ls
+  444  cd lvm/
+  445  ls
+  446  ssh 10.124.18.37
+  447  ls
+  448  ls /home/
+  449  id user1
+  450  sudo usermod -a -G libvirtd user1
+  451  sudo passwd user1
+  452  id
+  453  ls
+  454  vim gui-lvm.wiki 
+  455  fg
+  456  git status 
+  457  git mv gui-lvm.wiki lvm.wiki
+  458  git status 
+  459  git add lvm.wiki 
+  460  git status 
+  461  git commit
+  462  git push github master 
+  463  jobs -l
+  464  ps -l
+  465  lsb_release
+  466  lsb_release -a
+  467  lsb_release -r
+  468  lsb_release -r | awk '{print $2}'
+  469  echo $SHELL
+  470  echo $BASH_VERSION
+  471  echo $BASH_VERSION | head
+  472  echo $BASH_VERSION | cut -d "(" -f1
+  473  cd LXS2_
+  474  ls
+  475  cd LXS2_evb/
+  476  ls
+  477  cp /media/sysadmin/uk/Freelance/Academia/LXS2/LXS2.tar.gz misc/
+  478  git status 
+  479  git add misc/LXS2.tar.gz 
+  480  git push origin master
+  481  git commit -m "Material completo del curso"
+  482  git push origin master
+  483  git status 
+  484  git add src/distros.sh 
+  485  ls
+  486  ls
+  487  ls -l
+  488  chmod 750 exit-codes.sh 
+  489  ls -l
+  490  ./exit-codes.sh 
+  491  echo $?
+  492  ./exit-codes.sh 
+  493  echo $?
+  494  vim reporte.sh 
+  495  ks
+  496  ls
+  497  vim variables-01.sh 
+  498  ls -l
+  499  git status 
+  500  git add exit-codes.sh resumen.sh 
+  501  git commit -m "Inicio de clase de bash scripting"
+  502  git push origin master 
+  503  ls -l
+  504  chmod 750 resumen.sh 
+  505  ./resumen.sh 
+  506  ./resumen.sh casa
+  507  ./resumen.sh casa carro perro
+  508  ls
+  509  vim variables-01.sh 
+  510  ./resumen.sh casa carro
+  511  ./resumen.sh casa carro gato
+  512  ./resumen.sh casa casa gato
+  513  git status 
+  514  git add resumen.sh 
+  515  git commit -m "Ejemplo de if anidados"
+  516  git push origin master 
+  517  ls
+  518  ./resumen.sh casa perro gato
+  519  env BASH_VERSION=3.2 ./resumen.sh casa perro gato
+  520  env BASH_VERSION="3.2" ./resumen.sh casa perro gato
+  521  env BASH_VERSION=3.2 ./resumen.sh casa perro gato
+  522  ls
+  523  ./resumen.sh casa perro gato
+  524  lsb_release -r
+  525  lsb_release 
+  526  lsb_release -a
+  527  lsb_release
+  528  man lsb_release
+  529  lsb_release -d
+  530  lsb_release -D
+  531  man lsb_release
+  532  lsb_release -i
+  533  lsb_release -i  | awk '{print $3}'
+  534  ./resumen.sh casa perro gato
+  535  git status 
+  536  git add resumen.sh 
+  537  git commit -m "Finalización del ejemplo de if"
+  538  git push origin master
+  539  ./resumen.sh casa perro gato
+  540  ls
+  541  chmod 750 distros.sh 
+  542  ./distros.sh 
+  543  ./distros.sh debian
+  544  ./distros.sh debian dfgd
+  545  ./distros.sh debian dfgd asdfashdf
+  546  ls
+  547  git status 
+  548  git diff resumen.sh
+  549  git status 
+  550  git commit -m "Agrego ejemplo de for, contadores y comando let"
+  551  git add resumen.sh 
+  552  git commit -m "Agrego ejemplo de for, contadores y comando let"
+  553  git status 
+  554  git add distros.sh 
+  555  git commit -m "Ejemplo de case"
+  556  git push origin master
+  557  ./distros.sh debian dfgd asdfashdf
+  558  ls
+  559  ls .ssh/
+  560  cp .ssh/id_rsa.pub .
+  561  ls
+  562  cd LXS2_evb/
+  563  ls
+  564  git remote -v
+  565  git remote rm otroRepoTuanis
+  566  git remote rm otroRepo
+  567  git remote rm github
+  568  git remote add origin https://github.com/emvarg/LXS2_evb.git
+  569  git remote -v
+  570  git pull origin mas
+  571  git pull origin master 
+  572  ls
+  573  bash
+  574  sh
+  575  which bash
+  576   `which bash`
+  577  which bash
+  578  VAR1=`which bash`
+  579  echo $VAR1
+  580  echo $SHELL
+  581  uname -a 
+  582  ls
+  583  cd src/
+  584  ls
+  585  ls -l
+  586  vim reporte.sh 
+  587  echo $?
+  588  cp algo otro
+  589  echo $?
+  590  ls
+  591  vim exit-codes.sh
+  592  vim resumen.sh
+  593  vim distros.sh
+  594  last | head -l 5
+  595  last | head -n 5
+  596  vim /media/sysadmin/uk/Freelance/Academia/scripts/migracion-drupal.sh 
+  597  ls
+  598  exit 
+  599  cd LXS2_
+  600  ls
+  601  cd LXS2_e
+  602  cd LXS2_evb/
+  603  ls
+  604  cd history/
+  605  ls
+  606  history > history-$HOSTNAME-`date +%Y%m%d`
