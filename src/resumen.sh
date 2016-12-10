@@ -6,6 +6,23 @@
 # Definición de variables
 
 PARAMETROS=3
+VERSION_BASH="4.3.11"
+
+# Evaluar si la distro es ubuntu y si la versión de bash
+# es 4.3.11
+
+if [[ `echo $BASH_VERSION | cut -d "(" -f1` == $VERSION_BASH || 
+	`lsb_release -i  | awk '{print $3}'` == Ubuntu ]]
+then
+	echo "Versión de bash $VERSION_BASH correcta!"
+	echo "El valor de bash version es $BASH_VERSION"
+else
+	echo "Error:
+	Si versión de bash no es compatible con el script.
+	Necesita la versión $VERSION_BASH y está instalada
+	la versión $BASH_VERSION"
+	exit 1
+fi
 
 # Para diferencias uso !=
 if [[ $# != $PARAMETROS ]]
