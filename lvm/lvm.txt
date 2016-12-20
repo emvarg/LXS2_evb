@@ -194,20 +194,17 @@ con el comando resize2fs se actualiza la tabla de archivos.
 
 Se puede notar como el volumen lógico posee más espacio.
 
+Ahora, elimine todos los cambios que hizo:
+
+# umount /mnt/configs
+# lvremove /dev/vg01/misConfigs
+# vgremove vg01
+# pvremove /dev/vdb1
+# pvremove /dev/vda1
 
 = Referencias =
 [1] https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Virtualization_Administration_Guide/sect-Virtualization-Virtualized_block_devices-Adding_storage_devices_to_guests.html
 [2] https://www.howtoforge.com/linux_lvm_snapshots
 [3] http://www.slashroot.in/advanced-guide-lvm-logical-volume-management-linux-part-1
-
-
-
-
-
-
-
-
-
-
 
 
