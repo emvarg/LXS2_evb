@@ -1,0 +1,54 @@
+NAT: Netwok Adress Translation
+
+Escenario:
+
+Este laboratorio es una continuación del laboratorio sobre DHCP.
+
+Anteriormente, había logrado configurar un servicio de DHCP en una red
+privada con éxito, pero había un problema, no salía hacia internet.
+
+Esto se debe a que el firewall no sabe como redirigir los paquetes de red
+que llegan de una interfaz a otra.
+
+Para lograr esto, se va a configurar un NAT en este servidor (firewall)
+de forma que la red privada aún siga "escondida" pero sus clientes
+puedan navegar en internet.
+
+Para llevar acabo este laboratorio se hará uso de un programa llamado iptables
+que permite agregar reglas a las cadenas que debe atravesar un paquete de
+red para recorrer las distintas capas del stack.
+
+= Análisis del recorrido de un paquete hacia y desde internet =
+
+Este análisis contempla que el paquete se origina dentro de la red privada.
+Suponga que usted está en la estación del cliente y hace ping a yahoo.com
+en ese momento, el paquete sale hacia el gateway de la red, en este caso sería
+el firewall (ver diagrama al inicio del laboratorio de DHCP) cuya ip es
+10.0.0.1 y usa el puerto ens1
+
+ens1: 10.0.0.1
+ens2: 192.168.122.123
+
+##############################################################################
+# NOTA: la ip en la interfaz ens2 puede ser distinta, para usar una fija puede #
+# agregar a /etc/network/interfaces la que ya tiene.                           #
+##############################################################################
+
+Luego de que el paquete llega a este puerto, el firewall debe redirigir ese
+paquete hacia la interfaz ens2 que es la que da a dar a internet. A este
+proceso se le llama FORWARDING.
+
+Luego de que el paquete está listo para salir de la interfaz ens2 se le debe cambiar
+la dirección de origen (que era la del cliente) por la del firewall (que ahora es ens2)
+debido a que el paquete necesita volver de internet hacia el cliente con la información
+que se solicitó, pero el paquete no va a tener información de la red interna porque es
+privada, sino que va a tener la información del firewall que es quien "ve" hacia internet.
+
+Al proceso de cambiar la dirección de origen del cliente por la del firewall se le llama
+"MASQUERADING" o "enmascaramiento".
+
+= Comandos básicos =
+
+
+= Configuración de NAT =
+
