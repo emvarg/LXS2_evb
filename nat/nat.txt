@@ -29,26 +29,165 @@ el firewall (ver diagrama al inicio del laboratorio de DHCP) cuya ip es
 ens1: 10.0.0.1
 ens2: 192.168.122.123
 
-##############################################################################
+################################################################################
 # NOTA: la ip en la interfaz ens2 puede ser distinta, para usar una fija puede #
 # agregar a /etc/network/interfaces la que ya tiene.                           #
-##############################################################################
+################################################################################
 
 Luego de que el paquete llega a este puerto, el firewall debe redirigir ese
 paquete hacia la interfaz ens2 que es la que da a dar a internet. A este
 proceso se le llama FORWARDING.
 
-Luego de que el paquete está listo para salir de la interfaz ens2 se le debe cambiar
-la dirección de origen (que era la del cliente) por la del firewall (que ahora es ens2)
-debido a que el paquete necesita volver de internet hacia el cliente con la información
-que se solicitó, pero el paquete no va a tener información de la red interna porque es
-privada, sino que va a tener la información del firewall que es quien "ve" hacia internet.
+Luego de que el paquete está listo para salir de la interfaz ens2 se le debe
+cambiar la dirección de origen (que era la del cliente) por la del firewall (que 
+ahora es ens2) debido a que el paquete necesita volver de internet hacia el 
+cliente con la información que se solicitó, pero el paquete no va a tener
+información de la red interna porque es privada, sino que va a tener la
+información del firewall que es quien "ve" hacia internet.
 
-Al proceso de cambiar la dirección de origen del cliente por la del firewall se le llama
-"MASQUERADING" o "enmascaramiento".
+Al proceso de cambiar la dirección de origen del cliente por la del firewall se
+le llama "MASQUERADING" o "enmascaramiento".
 
 = Comandos básicos =
 
+Antes de hacer modificaciones al firewall vamos a instalar un paquete llamado
+iptables-persisten con el que podemos guardar y reestablecer las reglas
+básicas o personalizadas.
+
+$ sudo apt install iptables-persistent
+
+Luego de esto aparece un dialogo donde se le pregunta si desea guardar las
+reglas actuales, acepte todas las opciones que se le presenten por defecto.
+
+Al finalizar, se generan unos archivos en /etc/iptables/rules.v4 para reglas
+IPV4.
+
+ATENCION: Realice un respaldo de este archivo antes de continuar.
+
+Comandos de visualización (explicación en clase):
+
+Lista las reglas por especificación (indica como se crearon las reglas)
+# iptables -S
+# iptables -S INPUT
+# iptables -S FORWARD
+# iptables --table nat -S
+
+Lista las reglas como tablas
+
+# iptables -L
+# iptables -L INPUT
+# iptables -L OUTPUT
+
+Agrego el número de línea a las reglas, esto me ayuda a eliminarlas
+
+# iptables -L --line-numbers
+
+Ahora, se agregan las siguientes reglas
+
+# iptables -A INPUT -i lo -j ACCEPT
+# iptables -A INPUT ! -i lo -d 127.0.0.0/8 -j REJECT
+# iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+Estas reglas permiten el tráfico de entrada en la interfaz loopback (lo),
+la siguiente regla rechaza (REJECT) todo el tráfico que quiera pasar
+por la loopback y que no sea originado desde ahí. La última regla permite
+todas las conexiones que ya fueron establecidas (ESTABLISHED, esto se ve
+en con el comando "netstat -ltunpa")
+
+# iptables -A OUTPUT -j ACCEPT
+
+Esta regla permite todo el tráfico de salida (OUTPUT) y la siguiente regla
+permite tódo el tráfico de entrada que vaya para el puerto 22 que es el de
+ssh para conexiones remotas.
+
+# iptables -A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT
+
+# iptables -A INPUT -p icmp -j ACCEPT
+
+Esta última regla permite todas las formas del protocolo icmp como por ejemplo
+el usado por el comando ping.
+
+Ahora, repita todos los comandos de visualización vistos al inicio de la
+práctica para que pueda observar los nuevos cambios. Guarde el firewall recien
+creado con el comando iptables-save
+
+# iptables-save > ~/firewall_rules-0.1.v4
+
+Utilice el comando diff para ver las diferencias entre el respaldo original
+y el actual.
+
+Ahora, para comprobar que no se ve nada, bloquee la intrada a cualquier otro
+paquete que no sea los que ya permitimos.
+
+# iptables -A INPUT -j REJECT
+
+No se interrumpe la conexión por ssh debido a que habiamos agregado la regla
+de permitir la conexión por ssh desde antes. Note la importancia del orden
+en que se agregan las reglas al firewall. Estas reglas se recorren en orden.
+
+Si desea volver al estado original del firewall puede usar el siguiente método
+(asumiendo que el archivo con las reglas básicas que se respaldó al inicio
+se llamara rules.v4.orig)
+
+# iptables-restore < rules.v4.orig
+
+Para borrar reglas puedo usar la opción -D. Por ejemplo, borre la regla que
+acepta los ping. Una forma es usando la línea que crea la regla
+
+# iptables -S | grep icpm
+-A INPUT -p icmp -j ACCEPT
+# iptables -D INPUT -p icmp -j ACCEPT
+# iptables -S | grep icpm
+
+
+Ya no debe aparecer la regla. Otra forma puede ser con el número de la regla
+en la cadena.
+
+# iptables -L --line-number
+
+Suponiendo que la regla sea la 5 en la cadena de entrada (INPUT)
+
+# iptables -D INPUT 5
+
+Si se desea agregar la regla a una posición específica de una cadena se usa
+la opción -I. Por ejemplo, agregue una regla para permitir el tráfico de
+entrada por el puerto 80 para tráfico web en la posición 2 de la cadena
+INPUT.
+
+# iptables -I INPUT 2 -p tcp --dport 80 -j ACCEPT
 
 = Configuración de NAT =
+
+Para configurar el NAT primero habilitamos el reenvío de paquetes entre puertos.
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+Este cambio se perderá al reiniciar el servidor, si debe ser permanente se puede
+editar el archivo /etc/sysctl.conf
+
+# vim /etc/sysctl.conf
+[INICIO]---------------------
+
+net.ipv4.ip_forward=1
+
+[FIN]------------------------
+
+Ahora, se debe agregar una regla para que los paquetes de DNS puedan moverse
+entre las dos redes
+
+# iptables -A INPUT -i ens1 -p udp -m udp --dport 53 -j ACCEPT
+# iptables -A INPUT -i ens1 -p tcp -m tcp --dport 53 -j ACCEPT
+
+Ahora permitimos el reenvío entre la interfaz privada (ens1) y la que va a
+internet (ens2). Además en la tabla NAT se debe gregar la opción para que se
+enmascare el paquete cuando va a salir por la interfaz de internet.
+
+# iptables -A FORWARD -i ens3 -o ens5 -p tcp -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+# iptables -A FORWARD -i ens5 -o ens3 -p tcp -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+# iptables -A FORWARD -i ens5 -o ens3 -j ACCEPT
+# iptables -t nat -A POSTROUTING -o ens2 -j MASQUERADE
+
+
+Luego de esto intente conectarse al cliente y hacer ping a yahoo.com
+
 
