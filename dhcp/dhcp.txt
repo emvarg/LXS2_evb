@@ -151,8 +151,41 @@ ens1      Link encap:Ethernet  HWaddr 52:54:00:19:b9:e7
 La dirección MAC es la que viene en definida con "HWaddr" y está dada
 en hexadecimal
 
-52:54:00:19:b9:e7
+   52:54:00:19:b9:e7
 
-Esa dirección la vamos a agreagar en el archivo de cofiguración del servicio DHCP
+Esa dirección la vamos a agregar en el archivo de cofiguración del servicio
+DHCP.
+
+<firewall># vim /etc/dhcp/dhcpd.conf
+
+[INICIO]---------------------------
+
+host cliente {
+  hardware ethernet 52:54:00:19:b9:e7;
+  fixed-address 10.0.0.2;
+}
+
+
+[FIN]------------------------------
+
+Notar que ahora el cliente tendrá la ip 10.0.0.2 en lugar de la .10
+
+Para ver los cambios, podemos recargar el servidor o desde el cliente volver
+a solicitar ip. En el caso de que no se realice ninguna de las dos acciones,
+la ip del cliente permanecerá siendo la misma hasta que se acabe el tiempo de
+vigencia de la asignación (lease time = tiempo que se "da prestada, se asigna"
+la ip al cliente).
+
+Verifique que los cambios fueron correctos. Realice una prueba con ping desde
+el firewall hacia el cliente para ver si hay conexión.
+
+Repita el paso anterior (ping) pero dede el cliente al firewall. Ahora trate
+de hacer ping a yahoo.com
+
+= Preguntas que se debe hacer en este momento =
+
+¿qué ocurre en esta última prueba? ¿Logró alcanzar al sitio web (yahoo.com)?
+
+¿Por qué sucede esto?
 
 
