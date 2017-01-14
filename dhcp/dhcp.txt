@@ -1,0 +1,158 @@
+DHCP: Dynamic Host Configuration Protocol
+
+Escenario:
+
+Usted posee dos VMs (Virtual Machines) con Debian 8 instalado, estas máquinas
+están interconectadas entre si por una red privada, con la dirección y 
+máscara de red 10.0.0.0/24 respectivamente.
+
+Una de ellas, llamada firewall posee dos conexiones de red, una a la red
+privada y otra hacia internet, con la dirección y máscada de red
+192.168.122.0/24. La otra, llamada cliente, posee sólo una interfaz y está
+conectada a la red privada.
+
+
+                                                                  ______
+ ___________                   ___________                      _/      \_
+|           |   10.0.0.0/24   |           |  192.168.122.0/24  |          |
+|  Cliente  o~0.............0~o  Firewall o~0................o~0 Internet |
+|___________|                 |___________|                    |_        _|
+                                                                 \______/
+
+Interfaz disponible por nodo:
+
++ Firewall
+	ens1 : 10.0.0.0/24
+	ens2 : 192.168.122.0/24
+
++ Cliente
+	ens1 : 10.0.0.0/24
+
+###########################################################################
+# Nota: Para averiguar cuales son las inferfaces puede usar alguno de los #
+# siguientes comandos. Todos dan la información, sólo que algunos dan más #
+# que otros.                                                              #
+#                                                                         #
+#     ip -4 addr                                                          #
+#     ifconfig -a                                                         #
+###########################################################################
+
+El fin de este laboratorio es realizar una instalación de un servidor DHCP
+en la red privada de forma tal que al cliente se le asigne una dirección
+válida para comunicarse en la red. Se llevarán acabo dos tipos de
+configuraciones, primero una configuración dinámica y luego una estática.
+
+= Instalación de un servidor DHCP =
+
+Para instalar un servidor DHCP se necesitan los siguientes paquetes en la
+máquina "Firewall":
+
+$ sudo apt install isc-dhcp-server
+
+Luego de instalar el servidor, se debe configurar la interfaz donde se
+atenderán peticiones para el servicio.
+
+$ sudo su -
+# vim /etc/default/isc-dhcp-server
+[INICIO]---------------------------
+
+INTERFACES="ens1"
+
+[FIN]------------------------------
+
+Luego de modificar esa variable en el archivo de configuración se guardan
+los cambios y se continúa con la configuración del servicio.
+
+Recuerde hacer una copia del archivo original antes de modificarlo.
+
+= Configuración de un DHCP dinámico =
+
+Abra el archivo /etc/dhcp/dhcpd.conf (Notar que existe dhcp.conf sin la "d")
+
+# vim /etc/dhcp/dhcpd.conf
+[INICIO]---------------------------
+
+1 option domain-name "space.loco";
+2 option domain-name-servers 8.8.8.8;
+3
+4 subnet 10.0.0.0 netmask 255.255.255.0 {
+5  range 10.0.0.10 10.0.0.15;
+6  option routers 10.0.0.1;
+7 }
+8
+[FIN]------------------------------
+
+En la línea 1 se define el dominio de la red, luego en la 2 los dns que 
+usarán los clientes (esto se llega a ver en el cliente dentro del archivo 
+/etc/resolv.conf).
+
+La subred se empieza a definir en la línea 4 y la opción "range" establece
+que se asignarán automáticamente los clientes del 10 al 15. Esta asignación
+se inicia lleva acabo con forme van apareciendo nuevos clientes en la red.
+
+Luego de guardar los cambios se puede recargar el servicio y se revisan
+los logs para corroborar que no hubo errores.
+
+# service isc-dhcp-server force-reload
+# tail /var/log/syslog
+Jan 14 01:12:39 firewall dhcpd[2307]: Server starting service.
+
+Ahora, sigue revisar el cliente. Para que use una de las ip que le asignamos.
+Primero, hay que iniciar sesión en él, para esto vamos a usar el VNC de
+VirtManager ya que el cliente aún no debería tener red.
+
+Cuando está en el cliente, modifique /etc/network/interfaces para que use
+dhcp como medio para identificarse en la red.
+
+<cliente>$ sudo su -
+<cliente>$ vim /etc/network/interfaces
+[INICIO]---------------------------
+
+iface ens1 inet dhcp
+
+
+[FIN]------------------------------
+
+
+Ahora, vamos a utilizar el comando dhclient para pedir nuevamente
+una ip al firewall (recuerde que está conectado en el cliente, que no tiene
+dirección de red asignada y que en el firewall está el servidor dhcp que es
+quien debería atender mi petición)
+
+# dhclient ens1
+
+Luego de esto se debe asignar la ip 10.0.0.10 que es la primera disponible
+según el rango que escogimos.
+
+Verifique esto en el cliente tratando de hacer ping al firewall (10.0.0.1) 
+y revisando los parámetros asignados con los comandos "ip" e "ifconfig".
+
+En el firewall verifique que efectivamente el cliente pidió una ip para
+comunicarse en la red, esto lo puede hacer en el archivo /var/log/syslog
+
+= Configuración de un DHCP estático (Por dirección MAC) =
+
+Ahora se va a cambiar esta configuración dinámica para que sea estática,
+esto es, que el cliente siempre que se conecte, reciba la misma ip. Para
+lograr esto vamos a usar la dirección MAC (Media Access Control) del cliente.
+
+Podemos obtenerla con el comando ifconfig o con el comando ip
+
+$ sudo ifconfig ens1
+ens1      Link encap:Ethernet  HWaddr 52:54:00:19:b9:e7
+          inet addr:10.0.0.10  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::5054:ff:fe19:b9e7/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:37032 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:18678 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:50690 txqueuelen:1000
+          RX bytes:4569023 (4.5 MB)  TX bytes:3271433 (3.2 MB)
+
+La dirección MAC es la que viene en definida con "HWaddr" y está dada
+en hexadecimal
+
+52:54:00:19:b9:e7
+
+Esa dirección la vamos a agreagar en el archivo de cofiguración del servicio DHCP
+
+
